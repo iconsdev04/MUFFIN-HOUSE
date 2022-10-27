@@ -42,7 +42,7 @@ $ExtensionArray = array('jpg', 'png', 'webp', 'jpeg');
                     if (move_uploaded_file($Categorytempimage, $CategoryFolder)) {
 
                         $add_category_query =  mysqli_query($con, "INSERT INTO category_master (catId,categoryName,categoryImage,CreatedBy,CreatedDate) 
-                                VALUES ('$categoryMaxId','$CategoryName','$final_categoryimage_name','$user_id','$dateToday')");
+                                    VALUES ('$categoryMaxId','$CategoryName','$final_categoryimage_name','$user_id','$dateToday')");
                         if ($add_category_query) {
                             mysqli_commit($con);
                             echo json_encode(array('addCategory' => '1'));
@@ -126,32 +126,44 @@ $ExtensionArray = array('jpg', 'png', 'webp', 'jpeg');
 
 
 
-//Update Category
-if (isset($_POST['UpdateCategoryId'])) {
-    mysqli_autocommit($con, FALSE);
-    $updateCategoryId = SanitizeInt($_POST['UpdateCategoryId']);
-    $UpdateCategoryName = SanitizeInput($_POST['UpdateCategoryName']);
-    $updateCategoryImage = $_FILES['UpdateCategoryImage']['name'];
-    $updateCategoryextension = pathinfo($updateCategoryImage, PATHINFO_EXTENSION);
-    $updateCategorytempimage = $_FILES['UpdateCategoryImage']['tmp_name'];
-    $updatefinal_Categoryimage_name = $updateCategoryId . "." . $updateCategoryextension;
-    $updateCategoryfolder = "../CATEGORY/" . $updatefinal_Categoryimage_name;
+    //Update Category
+    if (isset($_POST['UpdateCategoryId'])) {
+        mysqli_autocommit($con, FALSE);
+        $updateCategoryId = SanitizeInt($_POST['UpdateCategoryId']);
+        $UpdateCategoryName = SanitizeInput($_POST['UpdateCategoryName']);
+        $updateCategoryImage = $_FILES['UpdateCategoryImage']['name'];
+        $updateCategoryextension = pathinfo($updateCategoryImage, PATHINFO_EXTENSION);
+        $updateCategorytempimage = $_FILES['UpdateCategoryImage']['tmp_name'];
+        $updatefinal_Categoryimage_name = $updateCategoryId . "." . $updateCategoryextension;
+        $updateCategoryfolder = "../CATEGORY/" . $updatefinal_Categoryimage_name;
 
 
-    $check_category_update_query = mysqli_query($con, "SELECT * FROM category_master WHERE categoryName = '$UpdateCategoryName'  AND catId <> '$updateCategoryId'");
-    if (mysqli_num_rows($check_category_update_query) > 0) {
-        echo json_encode(array('UpdateCategory' => '0'));
-    } else {
+        $check_category_update_query = mysqli_query($con, "SELECT * FROM category_master WHERE categoryName = '$UpdateCategoryName'  AND catId <> '$updateCategoryId'");
+        if (mysqli_num_rows($check_category_update_query) > 0) {
+            echo json_encode(array('UpdateCategory' => '0'));
+        } else {
 
-        if (!empty($_FILES['UpdateCategoryImage']['name'])) {
-            $CategoryFetch_query = mysqli_query($con, "SELECT categoryImage FROM category_master WHERE catId = '$updateCategoryId'");
-            foreach ($CategoryFetch_query as $Category_result) {
-                $CategoryUpdateimageValue = $Category_result['categoryImage'];
-                $CategoryUpdateimagePath = "../CATEGORY/" . $Category_result['categoryImage'];
-            }
-            if ($CategoryUpdateimageValue != null) {
-                if (unlink($CategoryUpdateimagePath)) {
+            if (!empty($_FILES['UpdateCategoryImage']['name'])) {
+                $CategoryFetch_query = mysqli_query($con, "SELECT categoryImage FROM category_master WHERE catId = '$updateCategoryId'");
+                foreach ($CategoryFetch_query as $Category_result) {
+                    $CategoryUpdateimageValue = $Category_result['categoryImage'];
+                    $CategoryUpdateimagePath = "../CATEGORY/" . $Category_result['categoryImage'];
+                }
+                if ($CategoryUpdateimageValue != null) {
+                    if (unlink($CategoryUpdateimagePath)) {
 
+                        if (move_uploaded_file($updateCategorytempimage, $updateCategoryfolder)) {
+                            $Category_update_query = mysqli_query($con, "UPDATE category_master SET categoryName = '$UpdateCategoryName', categoryImage = '$updatefinal_Categoryimage_name', UpdatedBy = '$user_id' , UpdatedDate = '$dateToday' WHERE catId = '$updateCategoryId'");
+                            if ($Category_update_query) {
+                                echo json_encode(array('UpdateCategory' => 1));
+                            } else {
+                                echo json_encode(array('UpdateCategory' => 2));
+                            }
+                        }
+                    } else {
+                        echo json_encode(array('UpdateCategory' => 3));
+                    }
+                } else {
                     if (move_uploaded_file($updateCategorytempimage, $updateCategoryfolder)) {
                         $Category_update_query = mysqli_query($con, "UPDATE category_master SET categoryName = '$UpdateCategoryName', categoryImage = '$updatefinal_Categoryimage_name', UpdatedBy = '$user_id' , UpdatedDate = '$dateToday' WHERE catId = '$updateCategoryId'");
                         if ($Category_update_query) {
@@ -160,32 +172,20 @@ if (isset($_POST['UpdateCategoryId'])) {
                             echo json_encode(array('UpdateCategory' => 2));
                         }
                     }
-                } else {
-                    echo json_encode(array('UpdateCategory' => 3));
                 }
             } else {
-                if (move_uploaded_file($updateCategorytempimage, $updateCategoryfolder)) {
-                    $Category_update_query = mysqli_query($con, "UPDATE category_master SET categoryName = '$UpdateCategoryName', categoryImage = '$updatefinal_Categoryimage_name', UpdatedBy = '$user_id' , UpdatedDate = '$dateToday' WHERE catId = '$updateCategoryId'");
-                    if ($Category_update_query) {
-                        echo json_encode(array('UpdateCategory' => 1));
-                    } else {
-                        echo json_encode(array('UpdateCategory' => 2));
-                    }
-                }
-            }
-        } else {
-            $update_category_query =  mysqli_query($con, "UPDATE category_master SET categoryName = '$UpdateCategoryName', UpdatedBy = '$user_id' , UpdatedDate = '$dateToday' WHERE catId = '$updateCategoryId'");
+                $update_category_query =  mysqli_query($con, "UPDATE category_master SET categoryName = '$UpdateCategoryName', UpdatedBy = '$user_id' , UpdatedDate = '$dateToday' WHERE catId = '$updateCategoryId'");
 
-            if ($update_category_query) {
-                mysqli_commit($con);
-                echo json_encode(array('UpdateCategory' => '1'));
-            } else {
-                mysqli_rollback($con);
-                echo json_encode(array('UpdateCategory' => '2'));
+                if ($update_category_query) {
+                    mysqli_commit($con);
+                    echo json_encode(array('UpdateCategory' => '1'));
+                } else {
+                    mysqli_rollback($con);
+                    echo json_encode(array('UpdateCategory' => '2'));
+                }
             }
         }
     }
-}
 
 
 ////////////////////////Category///////////////////////////////////
@@ -210,7 +210,7 @@ if (isset($_POST['UpdateCategoryId'])) {
             }
 
             $add_branch_query =  mysqli_query($con, "INSERT INTO branch_master (brId,branchName,CreatedBy,CreatedDate) 
-                        VALUES ('$branchMaxId','$BranchName','$user_id','$dateToday')");
+                            VALUES ('$branchMaxId','$BranchName','$user_id','$dateToday')");
             if ($add_branch_query) {
                 mysqli_commit($con);
                 echo json_encode(array('addBranch' => '1'));
@@ -275,10 +275,12 @@ if (isset($_POST['UpdateCategoryId'])) {
         $DeleteBranch = SanitizeInt($_POST['delBranch']);
 
         $check_Branch_del_query = mysqli_query($con, "SELECT * FROM table_master WHERE brId = '$DeleteBranch'");
+        $check_Branch_del_order_query = mysqli_query($con, "SELECT orderBranch FROM order_main WHERE orderBranch = '$DeleteBranch'");
         if (mysqli_num_rows($check_Branch_del_query) > 0) {
             echo json_encode(array('delBranch' => '0'));
+        } else if (mysqli_num_rows($check_Branch_del_order_query) > 0) {
+            echo json_encode(array('delBranch' => '0'));
         } else {
-
             $delete_Branch_query =  mysqli_query($con, "DELETE FROM branch_master WHERE brId = '$DeleteBranch'");
             if ($delete_Branch_query) {
                 mysqli_commit($con);
@@ -317,7 +319,7 @@ if (isset($_POST['UpdateCategoryId'])) {
             }
 
             $add_table_query =  mysqli_query($con, "INSERT INTO table_master (tId,brId,tableName,tableStatus,CreatedBy,CreatedDate) 
-                        VALUES ('$tableMaxId','$BranchId','$TableName','EMPTY','$user_id','$dateToday')");
+                            VALUES ('$tableMaxId','$BranchId','$TableName','EMPTY','$user_id','$dateToday')");
             if ($add_table_query) {
                 mysqli_commit($con);
                 echo json_encode(array('addTable' => '1'));
@@ -385,7 +387,7 @@ if (isset($_POST['UpdateCategoryId'])) {
         mysqli_autocommit($con, FALSE);
         $DeleteTable = SanitizeInt($_POST['delTable']);
 
-        $check_Table_del_query = mysqli_query($con, "SELECT * FROM products WHERE tId = '$DeleteTable'");
+        $check_Table_del_query = mysqli_query($con, "SELECT * FROM order_main WHERE orderTable = '$DeleteTable'");
         if (mysqli_num_rows($check_Table_del_query) > 0) {
             echo json_encode(array('delTable' => '0'));
         } else {
@@ -460,7 +462,7 @@ if (isset($_POST['UpdateCategoryId'])) {
     //Update Product
     if (isset($_POST['UpdateProductId'])) {
         mysqli_autocommit($con, FALSE);
-        
+
         $UpdateProductId = SanitizeInt($_POST['UpdateProductId']);
         $UpdateProductName = SanitizeInput($_POST['UpdateProductName']);
         $UpdateProductPrice = SanitizeInt($_POST['UpdateProductPrice']);
@@ -553,7 +555,7 @@ if (isset($_POST['UpdateCategoryId'])) {
             }
 
             $add_employee_query =  mysqli_query($con, "INSERT INTO employee_master (empId,empName,empPhone,empAddress,empEmail,empBranch,empRole,createdBy,createdDate) 
-                VALUES ('$add_employee_max','$EmpName','$EmpPhone','$EmpAddr','$EmpEmail','$EmpBranch','$EmpRole','$user_id','$dateToday')");
+                    VALUES ('$add_employee_max','$EmpName','$EmpPhone','$EmpAddr','$EmpEmail','$EmpBranch','$EmpRole','$user_id','$dateToday')");
 
             if ($add_employee_query) {
 
@@ -563,7 +565,7 @@ if (isset($_POST['UpdateCategoryId'])) {
                 }
 
                 $add_Empl_user_query =  mysqli_query($con, "INSERT INTO user_table (users_id,userName,userPhone,userPassword,userRole,empId,createdBy,createdDate) 
-                            VALUES ('$MaxEmplUserId','$EmpName','$EmpPhone','$EmpPass','$EmpRole','$add_employee_max','$user_id','$dateToday')");
+                                VALUES ('$MaxEmplUserId','$EmpName','$EmpPhone','$EmpPass','$EmpRole','$add_employee_max','$user_id','$dateToday')");
 
                 if ($add_Empl_user_query) {
                     mysqli_commit($con);
@@ -603,7 +605,7 @@ if (isset($_POST['UpdateCategoryId'])) {
         } else {
 
             $update_employee_query =  mysqli_query($con, "UPDATE employee_master SET empName = '$UpdateEmpName', empPhone = '$UpdateEmpPhone', empAddress = '$UpdateEmpAddr', 
-                empEmail = '$UpdateEmpEmail', empRole = '$UpdateEmpRole', empBranch = '$UpdateEmpBranch', updatedBy = '$user_id', updatedDate = '$dateToday' WHERE empId = '$UpdateEmpId'");
+                    empEmail = '$UpdateEmpEmail', empRole = '$UpdateEmpRole', empBranch = '$UpdateEmpBranch', updatedBy = '$user_id', updatedDate = '$dateToday' WHERE empId = '$UpdateEmpId'");
 
             if ($update_employee_query) {
                 $update_user_query = mysqli_query($con, "UPDATE user_table SET userName = '$UpdateEmpName', userPhone ='$UpdateEmpPhone', userPassword = '$UpdateEmpPass', userRole ='$UpdateEmpRole', updatedBy = '$user_id', updatedDate = '$dateToday' WHERE empId = '$UpdateEmpId'");
@@ -629,7 +631,7 @@ if (isset($_POST['UpdateCategoryId'])) {
         $DelEmpId = SanitizeInt($_POST['delUser']);
 
         mysqli_autocommit($con, FALSE);
-        
+
         $check_Employee_delete_query = mysqli_query($con, "SELECT * FROM order_main WHERE createdBy = '$DelEmpId'");
         if (mysqli_num_rows($check_Employee_delete_query) > 0) {
             echo json_encode(array('deleteUser' => '0'));
