@@ -1,0 +1,624 @@
+/**
+* Template Name: Delicious - v4.7.1
+* Template URL: https://bootstrapmade.com/delicious-free-restaurant-bootstrap-theme/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+
+
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #444444;
+    background-color: white;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+/*--------------------------------------------------------------
+# Navigation Menu
+--------------------------------------------------------------*/
+
+
+/**
+* Desktop Navigation 
+*/
+
+.navbar {
+    padding: 12px 5px;
+    border-radius: 50px 50px 0px 0px;
+    background-color: #d94042;
+}
+
+.navbar .nav-main {
+    height: 60px;
+    width: 60px;
+    background-color: #67c7c0;
+    border-radius: 50%;
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar .nav-main .mini-div {
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.navbar .nav-main .mini-div img {
+    height: 30px;
+    width: 30px;
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.navbar li {
+    position: relative;
+}
+
+.navbar a,
+.navbar a:focus {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 24px;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.navbar a i,
+.navbar a:focus i {
+    font-size: 20px;
+    line-height: 0;
+    margin-left: 5px;
+}
+
+.navbar a:hover,
+.navbar .active,
+.navbar .active:focus,
+.navbar li:hover>a {
+    color: #67c7c0;
+}
+
+@media only screen and (max-width: 300px) {
+    .navbar a,
+    .navbar a:focus {
+        margin: 0px;
+    }
+    .navbar .nav-main {
+        height: 60px;
+        width: 60px;
+    }
+    .navbar .nav-main .mini-div {
+        height: 50px;
+        width: 50px;
+    }
+    .navbar .nav-main .mini-div img {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+particle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    text-align: center;
+    z-index: 10000;
+}
+
+button {
+    padding: 20px;
+    margin: 10px;
+    align-self: center;
+}
+
+
+/*--------------------------------------------------------------
+# Hero Section
+--------------------------------------------------------------*/
+
+#hero {
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+    padding: 0;
+}
+
+#hero #heroCarousel {
+    z-index: -999 !important;
+}
+
+#hero .carousel-item {
+    width: 100%;
+    height: 70vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#hero .carousel-content {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#hero h2 {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 30px;
+    font-size: 2rem !important;
+    font-weight: 700;
+}
+
+#hero .carousel-inner .carousel-item {
+    transition-property: opacity;
+    background-position: center top;
+}
+
+#hero .carousel-inner .carousel-item,
+#hero .carousel-inner .active.carousel-item-start,
+#hero .carousel-inner .active.carousel-item-end {
+    opacity: 0;
+}
+
+#hero .carousel-inner .active,
+#hero .carousel-inner .carousel-item-next.carousel-item-start,
+#hero .carousel-inner .carousel-item-prev.carousel-item-end {
+    opacity: 1;
+    transition: 2s ease-in-out;
+}
+
+#hero .carousel-inner .carousel-item-next,
+#hero .carousel-inner .carousel-item-prev,
+#hero .carousel-inner .active.carousel-item-start,
+#hero .carousel-inner .active.carousel-item-end {
+    left: 0;
+    transform: translate3d(0, 0, 0);
+}
+
+#hero .carousel-control-next-icon,
+#hero .carousel-control-prev-icon {
+    background: none;
+    font-size: 30px;
+    line-height: 0;
+    width: auto;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    transition: 0.3s;
+    color: rgba(255, 255, 255, 0.5);
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#hero .carousel-control-next-icon:hover,
+#hero .carousel-control-prev-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#hero .carousel-indicators li {
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    #hero h2 {
+        font-size: 28px;
+    }
+    #heroCarousel a {
+        display: none;
+    }
+}
+
+@media (min-width: 1024px) {
+    #hero p {
+        width: 50%;
+    }
+    #hero .carousel-control-prev,
+    #hero .carousel-control-next {
+        width: 5%;
+    }
+}
+
+
+/*--------------------------------------------------------------
+# Menu Section
+--------------------------------------------------------------*/
+
+.title-div h1 {
+    font-weight: 700;
+    color: white;
+    margin-top: 30px;
+    font-size: 3rem;
+}
+
+.title-div h1 span {
+    color: #d94042;
+}
+
+.title-div {
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+.search-div {
+    z-index: 100 !important;
+    margin-top: -85px;
+    margin-bottom: 40px;
+}
+
+.quicksearch {
+    border-radius: 30px;
+    margin-bottom: 15px;
+    border: none;
+    padding: 10px 50px;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.quicksearch::placeholder {
+    color: rgba(0, 0, 0, 0.7);
+    padding-left: 0px;
+}
+
+.search-div span {
+    margin-top: 13px;
+    position: absolute;
+    margin-left: 18px;
+    color: #d94042;
+}
+
+.search-div span i {
+    font-size: 1.3rem;
+}
+
+.menu #menu-flters {
+    padding: 0;
+    margin: 0 auto 0 auto;
+    list-style: none;
+    text-align: center;
+    overflow-x: scroll;
+}
+
+.menu #menu-flters::-webkit-scrollbar {
+    display: none;
+}
+
+.menu #menu-flters li {
+    cursor: pointer;
+    display: inline-block;
+    height: 80px;
+    width: 80px;
+    padding: 3px 0px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444444;
+    margin-top: 5px !important;
+    transition: all ease-in-out 0.3s;
+    background: #fff;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.menu #menu-flters div span {
+    font-size: 0.89rem;
+    margin-top: 5px;
+}
+
+.menu #menu-flters div {
+    margin-right: 13px;
+}
+
+.menu #menu-flters li img {
+    height: 70px;
+    width: 70px;
+    border-radius: 8px;
+}
+
+.menu #menu-flters li.filter-active {
+    color: #fff;
+    border-color: #d94042;
+}
+
+.menu #menu-flters li:last-child {
+    margin-right: 0;
+}
+
+.menu .menu-item .subheading {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    color: #d94042;
+    font-size: 1.12rem;
+}
+
+.menu .menu-item .menu-cont .title {
+    position: absolute;
+    color: rgb(255, 255, 255, 1);
+    text-shadow: 2px 2px 3px black;
+    padding-top: 5px;
+    padding-left: 12px;
+    padding-right: 17px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.menu .menu-item .menu-cont .foot {
+    background-color: #67c7c0;
+    border-radius: 0px 0px 10px 10px;
+    padding-top: 5px;
+    padding-bottom: 0px;
+}
+
+.menu .menu-item .menu-cont .foot .time i {
+    vertical-align: middle;
+    margin-top: -3px;
+    font-size: 1rem;
+}
+
+.menu .menu-item .menu-cont .foot h6 {
+    margin-bottom: 6px;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.menu .menu-item .individual-item {
+    border-bottom: 1px solid lightgray;
+}
+
+.menu .menu-item .cart-single-item {
+    border-radius: 12px;
+    background-color: #fcffff;
+    box-shadow: 2px 3px 10px rgb(234, 234, 234);
+}
+
+.menu .menu-item .cart-single-item .amount_details h6 {
+    color: #d94042;
+    font-weight: 600;
+}
+
+.menu .menu-container .buttonside .AddButton {
+    border-radius: 10px;
+    border: 2px solid lightgray;
+    padding: 0px;
+    margin: 0px;
+}
+
+.menu .menu-container .buttonside .AddButtonCart {
+    border: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.menu .menu-container .buttonside .AddButtonCart .btnAddItem {
+    border-radius: 8px;
+    border: 2px solid lightgray;
+}
+
+.menu .menu-container .buttonside .AddButtonCart .btnRemoveItem {
+    border-radius: 8px;
+    border: 2px solid lightgray;
+}
+
+.menu .menu-container .buttonside .AddButtonCart .qtyvalue {
+    width: 35px;
+    border: none;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    background-color: #fcffff;
+}
+
+.menu .menu-container .buttonside .AddButtonCart button {
+    margin: 0px;
+    border-radius: 0px;
+    border: none;
+}
+
+.menu .menu-container .buttonside .AddButtonCart button:first-child {
+    padding: 3px 10px;
+}
+
+.menu .menu-container .buttonside .AddButtonCart button:last-child {
+    padding: 3px 8px;
+}
+
+.menu .menu-container .buttonside .AddButton .qtyvalue {
+    width: 35px;
+    border: none;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.menu .menu-container .buttonside .AddButton button {
+    margin: 0px;
+    border-radius: 0px;
+    border: none;
+}
+
+.menu .menu-container .buttonside .AddButton button:first-child {
+    border-right: 1px solid lightgray;
+    border-radius: 8px 0px 0px 8px;
+}
+
+.menu .menu-container .buttonside .AddButton button:last-child {
+    border-left: 1px solid lightgray;
+    border-radius: 0px 8px 8px 0px;
+}
+
+.menu .menu-container .buttonside .AddButton h6 {
+    padding: 0px 6px;
+}
+
+.menu .menu-container .buttonside .AddButton h6,
+.menu .menu-container .buttonside .AddButton button {
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.menu .menu-container .buttonside .AddButton button:hover {
+    background-color: rgb(232, 231, 231);
+}
+
+.menu .paycard {
+    border-radius: 15px;
+    box-shadow: 2px 3px 10px rgb(234, 234, 234);
+}
+
+.menu .menu-content h5 {
+    padding-right: 5px;
+    font-weight: 700;
+    color: black;
+    font-size: 18px;
+}
+
+.menu .menu-ingredients {
+    font-size: 14px;
+    color: #948c81;
+}
+
+.menu .menu-ingredients h6 {
+    color: #d94042;
+    font-weight: 600;
+    font-size: 19px;
+    padding-bottom: 7px;
+}
+
+.menu .menu-ingredients span i {
+    vertical-align: top;
+    margin-top: 2px;
+    font-size: 15px;
+}
+
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+
+#footer {
+    background: white;
+    color: #444444;
+    font-size: 14px;
+    text-align: center;
+    padding: 30px 0;
+    padding-bottom: 80px;
+}
+
+#footer .footer-img {
+    height: 100px;
+    margin-bottom: 30px;
+}
+
+#footer .footer-img img {
+    height: 100px;
+}
+
+#footer h3 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #67c7c0;
+    position: relative;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+
+#footer p {
+    font-size: 15;
+    padding: 0;
+    margin: 0 0 40px 0;
+}
+
+#footer .copyright {
+    margin: 0 0 5px 0;
+}
+
+#footer .credits {
+    font-size: 13px;
+}
+
+
+/************************************Index page*********************************************/
+
+.bottomDivCart {
+    background: linear-gradient(360deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.3));
+    position: sticky;
+    bottom: 0;
+    padding-top: 50px;
+    padding-bottom: 16px;
+}
+
+.bottomDivCart .AddtoCart #ButtonOrder {
+    font-size: 20px;
+    border: none;
+}
+
+.bottomDiv {
+    display: none;
+    background: linear-gradient(360deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.3));
+    position: sticky;
+    bottom: 0;
+    padding-top: 50px;
+    padding-bottom: 16px;
+}
+
+.AddtoCart {
+    background-color: #d94042;
+    color: white;
+    margin: 10px 10px;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.AddtoCart h6 {
+    font-weight: 600;
+    font-size: 19px;
+}
+
+.AddtoCart p {
+    margin-bottom: 5px;
+}
+
+.AddtoCart #ButtonNext {
+    border: none;
+}
