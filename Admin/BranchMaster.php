@@ -1,4 +1,4 @@
-<?php  session_start(); ?>
+<?php session_start(); ?>
 <?php
 
 include '../MAIN/Dbconfig.php';
@@ -6,20 +6,15 @@ include '../MAIN/Dbconfig.php';
 $pageTitle = 'BranchMaster';
 
 
-if(isset($_SESSION['custname']) && isset($_SESSION['custtype'])){
+if (isset($_SESSION['custname']) && isset($_SESSION['custtype'])) {
 
-    if($_SESSION['custtype'] == 'SuperAdmin' || $_SESSION['custtype'] == 'Admin'){
-
-    }
-    else{
+    if ($_SESSION['custtype'] == 'SuperAdmin' || $_SESSION['custtype'] == 'Admin') {
+    } else {
         header("location:../login.php");
     }
-    
-}
-else{
+} else {
 
-header("location:../login.php");
-
+    header("location:../login.php");
 }
 
 ?>
@@ -172,7 +167,7 @@ header("location:../login.php");
                 </div>
                 <?php include '../MAIN/Sidebar.php'; ?>
 
-                
+
             </div>
 
         </div>
@@ -522,52 +517,54 @@ header("location:../login.php");
             console.log(delValue);
             $('#delModal').modal('show');
             $('#confirmYes').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "MasterOperations.php",
-                    data: {
-                        delBranch: delValue
-                    },
-                    beforeSend: function() {
-                        $('#loading').show();
-                        $('#delModal').modal('hide');
-                        $('#ResponseImage').html("");
-                        $('#ResponseText').text("");
-                    },
-                    success: function(data) {
-                        $('#loading').hide();
-                        console.log(data);
-                        if (TestJson(data) == true) {
-                            var delResponse = JSON.parse(data);
-                            if (delResponse.delBranch == 0) {
-                                $('#ResponseImage').html('<img src="./warning.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Branch is Already in Use");
-                                $('#confirmModal').modal('show');
-                            } else if (delResponse.delBranch == 1) {
-                                $('#ResponseImage').html('<img src="./success.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Successfully Deleted Branch");
-                                $('#confirmModal').modal('show');
-                                $('#updatebranch_form')[0].reset();
-                                MasterTable.ajax.reload();
-                            } else if (delResponse.delBranch == 2) {
+                if (delValue != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "MasterOperations.php",
+                        data: {
+                            delBranch: delValue
+                        },
+                        beforeSend: function() {
+                            $('#loading').show();
+                            $('#delModal').modal('hide');
+                            $('#ResponseImage').html("");
+                            $('#ResponseText').text("");
+                        },
+                        success: function(data) {
+                            $('#loading').hide();
+                            console.log(data);
+                            if (TestJson(data) == true) {
+                                var delResponse = JSON.parse(data);
+                                if (delResponse.delBranch == 0) {
+                                    $('#ResponseImage').html('<img src="./warning.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Branch is Already in Use");
+                                    $('#confirmModal').modal('show');
+                                } else if (delResponse.delBranch == 1) {
+                                    $('#ResponseImage').html('<img src="./success.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Successfully Deleted Branch");
+                                    $('#confirmModal').modal('show');
+                                    $('#updatebranch_form')[0].reset();
+                                    MasterTable.ajax.reload();
+                                } else if (delResponse.delBranch == 2) {
+                                    $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Failed Deleting branch");
+                                    $('#confirmModal').modal('show');
+                                }
+                                delValue = undefined;
+                                delete window.delValue;
+                            } else {
                                 $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Failed Deleting branch");
+                                $('#ResponseText').text("Some Error Occured, Please refresh the page (ERROR : 12ENJ)");
                                 $('#confirmModal').modal('show');
                             }
-                            delValue = undefined;
-                            delete window.delValue;
-                        } else {
+                        },
+                        error: function() {
                             $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                            $('#ResponseText').text("Some Error Occured, Please refresh the page (ERROR : 12ENJ)");
+                            $('#ResponseText').text("Please refresh the page to continue (ERROR : 12EFF)");
                             $('#confirmModal').modal('show');
-                        }
-                    },
-                    error: function() {
-                        $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                        $('#ResponseText').text("Please refresh the page to continue (ERROR : 12EFF)");
-                        $('#confirmModal').modal('show');
-                    },
-                });
+                        },
+                    });
+                } else {}
             });
             $('#confirmNo').click(function() {
                 delValue = undefined;

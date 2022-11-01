@@ -549,6 +549,10 @@ body {
     padding: 10px 20px;
 }
 
+#OrderModal .modalmainDiv .tab-content .orderDetails h6 {
+    font-size: 15px;
+}
+
 #OrderModal .modalmainDiv .nav-item .nav-link.active {
     background-color: rgba(170, 255, 238, 1);
     font-weight: 600;

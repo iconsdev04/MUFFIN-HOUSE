@@ -176,7 +176,7 @@ if (isset($_SESSION['custname']) && isset($_SESSION['custtype'])) {
                 <div class="text-center deleteImg">
                     <canvas id="LinkQr"></canvas>
                 </div>
-                <div class="d-flex justify-content-between">    
+                <div class="d-flex justify-content-between">
                     <a href="" class="btn btn-success mt-4 py-2" download="QrCode.png" id="DownloadQr">Download</a>
                     <button class="btn btn-danger mt-4 px-4 py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
@@ -249,7 +249,7 @@ if (isset($_SESSION['custname']) && isset($_SESSION['custtype'])) {
                                     </select>
                                 </div>
                                 <div class="col-lg-2 col-6">
-                                    <button class="btn btn_reset px-5" ><span>Clear</span></button>
+                                    <button class="btn btn_reset px-5"><span>Clear</span></button>
                                 </div>
                                 <div class="col-lg-4 text-end col-4">
                                     <button class="btn add_master px-5" data-bs-toggle="modal" data-bs-target="#TableModal"> <span> <i class="material-icons">add</i> </span> <span>Add Table</span></button>
@@ -299,7 +299,7 @@ if (isset($_SESSION['custname']) && isset($_SESSION['custtype'])) {
 <script>
     $(document).ready(function() {
 
-       
+
 
         //modal close function
         $(".addUpdateModal").on("hidden.bs.modal", function() {
@@ -607,52 +607,54 @@ if (isset($_SESSION['custname']) && isset($_SESSION['custtype'])) {
             console.log(delValue);
             $('#delModal').modal('show');
             $('#confirmYes').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "MasterOperations.php",
-                    data: {
-                        delTable: delValue
-                    },
-                    beforeSend: function() {
-                        $('#loading').show();
-                        $('#delModal').modal('hide');
-                        $('#ResponseImage').html("");
-                        $('#ResponseText').text("");
-                    },
-                    success: function(data) {
-                        $('#loading').hide();
-                        console.log(data);
-                        if (TestJson(data) == true) {
-                            var delResponse = JSON.parse(data);
-                            if (delResponse.delTable == 0) {
-                                $('#ResponseImage').html('<img src="./warning.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Table is Already in Use");
-                                $('#confirmModal').modal('show');
-                            } else if (delResponse.delTable == 1) {
-                                $('#ResponseImage').html('<img src="./success.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Successfully Deleted Table");
-                                $('#confirmModal').modal('show');
-                                $('#updatetable_form')[0].reset();
-                                MasterTable.ajax.reload();
-                            } else if (delResponse.delTable == 2) {
+                if (delValue != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "MasterOperations.php",
+                        data: {
+                            delTable: delValue
+                        },
+                        beforeSend: function() {
+                            $('#loading').show();
+                            $('#delModal').modal('hide');
+                            $('#ResponseImage').html("");
+                            $('#ResponseText').text("");
+                        },
+                        success: function(data) {
+                            $('#loading').hide();
+                            console.log(data);
+                            if (TestJson(data) == true) {
+                                var delResponse = JSON.parse(data);
+                                if (delResponse.delTable == 0) {
+                                    $('#ResponseImage').html('<img src="./warning.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Table is Already in Use");
+                                    $('#confirmModal').modal('show');
+                                } else if (delResponse.delTable == 1) {
+                                    $('#ResponseImage').html('<img src="./success.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Successfully Deleted Table");
+                                    $('#confirmModal').modal('show');
+                                    $('#updatetable_form')[0].reset();
+                                    MasterTable.ajax.reload();
+                                } else if (delResponse.delTable == 2) {
+                                    $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Failed Deleting Table");
+                                    $('#confirmModal').modal('show');
+                                }
+                                delValue = undefined;
+                                delete window.delValue;
+                            } else {
                                 $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Failed Deleting Table");
+                                $('#ResponseText').text("Some Error Occured, Please refresh the page (ERROR : 12ENJ)");
                                 $('#confirmModal').modal('show');
                             }
-                            delValue = undefined;
-                            delete window.delValue;
-                        } else {
+                        },
+                        error: function() {
                             $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                            $('#ResponseText').text("Some Error Occured, Please refresh the page (ERROR : 12ENJ)");
+                            $('#ResponseText').text("Please refresh the page to continue (ERROR : 12EFF)");
                             $('#confirmModal').modal('show');
-                        }
-                    },
-                    error: function() {
-                        $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                        $('#ResponseText').text("Please refresh the page to continue (ERROR : 12EFF)");
-                        $('#confirmModal').modal('show');
-                    },
-                });
+                        },
+                    });
+                } else {}
             });
             $('#confirmNo').click(function() {
                 delValue = undefined;

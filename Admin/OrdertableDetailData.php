@@ -93,10 +93,10 @@ if (isset($_POST['TableId'])) {
                     </div>
 
                     <div class="d-flex justify-content-between my-4">
-                        <div class="rounded-pill orderDetails ">
-                            <h6 class="m-0 p-0">ID : #<?= $FindAllOrderResult['orderId']; ?></h6>
+                        <div class="rounded-pill orderDetails">
+                            <h6 class="m-0 p-0 ">ID : #<?= $FindAllOrderResult['orderId']; ?></h6>
                         </div>
-                        <div class="rounded-pill orderDetails ">
+                        <div class="rounded-pill orderDetails">
                             <h6 class="m-0 p-0">Time : <?= date('h:i A, d M', strtotime($FindAllOrderResult['createdDate']) ); ?></h6>
                         </div>
                         <div class="rounded-pill orderDetails ">
@@ -116,6 +116,7 @@ if (isset($_POST['TableId'])) {
                         <div class="d-flex">
                             <button type="button" value="<?= $oId; ?>" class="btn btn_save btn_payment me-3" <?php echo ($FindAllOrderResult['orderPayment'] == 'SUCCESS') ? "disabled" : "" ?>> <span>Recieved Payment</span> </button>
                             <button type="button" value="<?= $oId; ?>" class="btn btn_save btn_complete"> <span>Order Completed</span> </button>
+                            <a href="Invoice.php?OrderId=<?= $oId ?>" target="_blank" class="btn btn_save ms-3 px-3 py-2" > <i style="vertical-align: middle;" class="material-icons">print</i>  </a>
                         </div>
                     </div>
                 </div>

@@ -1,24 +1,19 @@
-<?php  session_start(); ?>
+<?php session_start(); ?>
 <?php
 
 include '../MAIN/Dbconfig.php';
 
 $pageTitle = 'UserMaster';
 
-if(isset($_SESSION['custname']) && isset($_SESSION['custtype'])){
+if (isset($_SESSION['custname']) && isset($_SESSION['custtype'])) {
 
-    if($_SESSION['custtype'] == 'SuperAdmin' || $_SESSION['custtype'] == 'Admin'){
-
-    }
-    else{
+    if ($_SESSION['custtype'] == 'SuperAdmin' || $_SESSION['custtype'] == 'Admin') {
+    } else {
         header("location:../login.php");
     }
-    
-}
-else{
+} else {
 
-header("location:../login.php");
-
+    header("location:../login.php");
 }
 
 ?>
@@ -131,7 +126,7 @@ header("location:../login.php");
                                     <input type="text" class="form-control" id="SearchBar" placeholder="Search by Name,Phone,Role">
                                 </div>
                                 <div class="col-lg-4 text-end col-4">
-                                    <a href="./AddUser.php" class="btn add_master px-5" > <span> <i class="material-icons">add</i> </span> <span>Add User</span></a>
+                                    <a href="./AddUser.php" class="btn add_master px-5"> <span> <i class="material-icons">add</i> </span> <span>Add User</span></a>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +170,7 @@ header("location:../login.php");
     $(document).ready(function() {
 
 
-      
+
         //data Table
         var MasterTable = $('#MasterTable').DataTable({
             "processing": true,
@@ -229,7 +224,7 @@ header("location:../login.php");
                     "render": function(data, type, row, meta) {
                         if (type == 'display') {
                             //data = '<button class=" btn btn_actions btn_edit me-3  shadow-none" type="button" data-bs-toggle="tooltip" data-bs-custom-class="edit-tooltip" data-bs-placement="top" data-bs-title="Edit" value="' + data + '"> <i class="material-icons">edit</i> </button>';
-                            data = '<div class="d-flex justify-content-end me-3">  <a href="UpdateUser.php?UId=' + data +'" class="btn btn_actions btn_edit me-3" data-bs-toggle="tooltip" data-bs-custom-class="edit-tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="material-icons">edit</i> </a> <button class="btn btn_actions btn_delete" data-bs-toggle="tooltip" data-bs-custom-class="delete-tooltip" data-bs-placement="top" data-bs-title="Delete" value="' + data + '"><i class="material-icons">delete</i> </button>  </div>'
+                            data = '<div class="d-flex justify-content-end me-3">  <a href="UpdateUser.php?UId=' + data + '" class="btn btn_actions btn_edit me-3" data-bs-toggle="tooltip" data-bs-custom-class="edit-tooltip" data-bs-placement="top" data-bs-title="Edit"><i class="material-icons">edit</i> </a> <button class="btn btn_actions btn_delete" data-bs-toggle="tooltip" data-bs-custom-class="delete-tooltip" data-bs-placement="top" data-bs-title="Delete" value="' + data + '"><i class="material-icons">delete</i> </button>  </div>'
                         }
                         return data;
                     }
@@ -258,52 +253,54 @@ header("location:../login.php");
             console.log(delValue);
             $('#delModal').modal('show');
             $('#confirmYes').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "MasterOperations.php",
-                    data: {
-                        delUser: delValue
-                    },
-                    beforeSend: function() {
-                        $('#loading').show();
-                        $('#delModal').modal('hide');
-                        $('#ResponseImage').html("");
-                        $('#ResponseText').text("");
-                    },
-                    success: function(data) {
-                        $('#loading').hide();
-                        console.log(data);
-                        if (TestJson(data) == true) {
-                            var delResponse = JSON.parse(data);
-                            if (delResponse.deleteUser == 0) {
-                                $('#ResponseImage').html('<img src="./warning.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("User is Already in Use");
-                                $('#confirmModal').modal('show');
-                            } else if (delResponse.deleteUser == 1) {
-                                $('#ResponseImage').html('<img src="./success.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Successfully Deleted User");
-                                $('#confirmModal').modal('show');
-                                $('#updatebranch_form')[0].reset();
-                                MasterTable.ajax.reload();
-                            } else if (delResponse.deleteUser == 2) {
+                if (delValue != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "MasterOperations.php",
+                        data: {
+                            delUser: delValue
+                        },
+                        beforeSend: function() {
+                            $('#loading').show();
+                            $('#delModal').modal('hide');
+                            $('#ResponseImage').html("");
+                            $('#ResponseText').text("");
+                        },
+                        success: function(data) {
+                            $('#loading').hide();
+                            console.log(data);
+                            if (TestJson(data) == true) {
+                                var delResponse = JSON.parse(data);
+                                if (delResponse.deleteUser == 0) {
+                                    $('#ResponseImage').html('<img src="./warning.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("User is Already in Use");
+                                    $('#confirmModal').modal('show');
+                                } else if (delResponse.deleteUser == 1) {
+                                    $('#ResponseImage').html('<img src="./success.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Successfully Deleted User");
+                                    $('#confirmModal').modal('show');
+                                    $('#updatebranch_form')[0].reset();
+                                    MasterTable.ajax.reload();
+                                } else if (delResponse.deleteUser == 2) {
+                                    $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
+                                    $('#ResponseText').text("Failed Deleting User");
+                                    $('#confirmModal').modal('show');
+                                }
+                                delValue = undefined;
+                                delete window.delValue;
+                            } else {
                                 $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                                $('#ResponseText').text("Failed Deleting User");
+                                $('#ResponseText').text("Some Error Occured, Please refresh the page (ERROR : 12ENJ)");
                                 $('#confirmModal').modal('show');
                             }
-                            delValue = undefined;
-                            delete window.delValue;
-                        } else {
+                        },
+                        error: function() {
                             $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                            $('#ResponseText').text("Some Error Occured, Please refresh the page (ERROR : 12ENJ)");
+                            $('#ResponseText').text("Please refresh the page to continue (ERROR : 12EFF)");
                             $('#confirmModal').modal('show');
-                        }
-                    },
-                    error: function() {
-                        $('#ResponseImage').html('<img src="./error.jpg" style="height:130px;width:130px;" class="img-fluid" alt="">');
-                        $('#ResponseText').text("Please refresh the page to continue (ERROR : 12EFF)");
-                        $('#confirmModal').modal('show');
-                    },
-                });
+                        },
+                    });
+                } else {}
             });
             $('#confirmNo').click(function() {
                 delValue = undefined;
